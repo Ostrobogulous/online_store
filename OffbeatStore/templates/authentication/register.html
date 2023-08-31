@@ -1,0 +1,22 @@
+{%  extends "layout.html" %}
+{% block title %}Register{% endblock title %}
+{% block content %}
+        <div class="forms-container">
+            <div class="special-padding">
+                <h2>Sing Up</h2>
+                <p style="color: #797979;">Easy-peasy</p>
+            </div>
+            <hr>
+            <div class="special-padding">
+                <form method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required autocomplete="off"  value="{{ request.form['username'] }}">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required autocomplete="off" value="{{ request.form['password'] }}">
+                    <label for="password_confirmation">Confirm Password:</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="off" value="{{ request.form['password_confirmation'] }}">
+                    <input type="submit" value="Register">
+                </form>
+            </div>
+        </div>
+{% endblock %}

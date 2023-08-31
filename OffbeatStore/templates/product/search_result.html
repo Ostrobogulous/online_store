@@ -1,0 +1,56 @@
+{%  extends "layout.html" %}
+{% block title %}{{ keyword }}{% endblock title %}
+{% block content %}
+    <div class="search-box">
+        <form method="get" action = "{{ url_for('product.search') }}">
+            <label for="keyword"></label>
+            <input type="text" name="keyword" id="keyword" placeholder="Search..." required autocomplete="off" value="{{ keyword }}">
+            <input type="submit" class="res" value="Seek">
+            <input type="hidden" name="sort" value="{{ selected_sort }}">
+        </form>
+    </div>
+    <br>
+    <hr>
+    <h1 style="text-align: center; margin-top:20px">Search result: </h1>
+    <form id="sortForm">
+        <input type="hidden" name="keyword" value="{{ keyword }}">
+        <label for="sortSelect" style="font-size: 20px; margin-left: 10px;">Sort By:</label>
+        <select id="sortSelect" name="sort" onchange="submitSortForm()" style="font-size: 16px">
+        <option value="latest" {% if selected_sort == 'latest' %}selected{% endif %}>Latest First</option>
+        <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+        <option value="likes-count" {% if selected_sort == 'likes-count' %}selected{% endif %}>Likes Count</option>
+        <option value="dislikes-count" {% if selected_sort == 'dislikes-count' %}selected{% endif %}>Dislikes Count</option>
+        <option value="reactions-count" {% if selected_sort == 'reactions-count' %}selected{% endif %}>Reactions Count</option>
+        <option value="price-ascending" {% if selected_sort == 'price-ascending' %}selected{% endif %}>Price Ascending</option>
+        <option value="price-descending" {% if selected_sort == 'price-descending' %}selected{% endif %}>Price Descending</option>
+        </select>
+    </form>
+    <script src="{{ url_for('static', filename='custom_functions.js') }}"></script>
+    <div class="items-container">
+        {%  for product in products %}
+        <a class="no-decoration" href="{{ url_for('product.product_page', id=product['id']) }}">
+        <div class="item-box">
+            <div class="image-box">
+                <img src="{{ product.image }}" alt="{{ product.label }}" class="item-image">
+            </div>
+            <h2 style="text-align: center">{{ product.label }}</h2>
+            <p class="text1"><strong>Category: </strong>{{ product.category }}</p>
+            <p class="text1"><strong>Brand: </strong>{{ product.brand }}</p>
+            <p class="text1"><strong>Quantity: </strong>{{ product.quantity }}</p>
+            <p class="text1"><strong>Published: </strong>{{ product.published.strftime("%d-%m-%Y") }}</p>
+            {%  if g.user["id"] == product["seller_id"] %}
+            <p><a class="action" href="{{ url_for('product.update', id=product['id']) }}">Edit</a></p>
+            {% else %}
+            <p class="text1"><strong>Seller: </strong><a href="{{ url_for('profile.profile_page', id=product['seller_id']) }}">{{ product["username"] }}</a></p>
+            {% endif %}
+            <div style="margin-top:10px">
+                {{ product.likes }}
+                <a class="btn" href="{{ url_for('product.react', id=product['id'], type=1) }}"><i class="{{ product.reaction_settings.like_icon }}" aria-hidden="true" style="color: {{ product.reaction_settings.like_color }}"></i></a>
+                {{ product.dislikes }}
+                <a class="btn" id="red" href="{{ url_for('product.react', id=product['id'], type=-1) }}"><i class="{{ product.reaction_settings.dislike_icon}}" aria-hidden="true" style="color: {{ product.reaction_settings.dislike_color }}"></i></a>
+            </div>
+             <h3 style="text-align: center; color: #1365ad  ">{{ currency_symbol }} {{ product.price }}</h3>
+        </div></a>
+        {%  endfor %}
+    </div>
+{% endblock %}

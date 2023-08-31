@@ -1,0 +1,13 @@
+{%  extends "layout.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+    <div class="search-panel">
+        <h2>Search for any tech device</h2>
+        <br>
+        <form method="get" action = "{{ url_for("product.search") }}">
+            <label for="keyword"></label><input type="text" name="keyword" id="keyword" placeholder="Search..." required autocomplete="off">
+            <input type="submit" class="res" value="Seek">
+            <input type="hidden" name="sort" value="{{ "latest" }}">
+        </form>
+    </div>
+{% endblock %}

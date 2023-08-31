@@ -1,0 +1,47 @@
+{%  extends "layout.html" %}
+{% block title %}{{ username }} Profile{% endblock title %}
+{% block content %}
+    <h2 style="text-align: center;margin-top: 20px">
+    {% if g.user["id"] == id %}
+    My Reviews:
+    {% else %}
+    {{ username }} Reviews:
+    {% endif %}</h2>
+    {% for reviewed_product in reviewed_products %}
+    <div class="review-view">
+        <a class="no-decoration" href="{{ url_for('product.product_page', id=reviewed_product['id']) }}">
+        <div class="item-box">
+            <div class="image-box">
+                <img src="{{ reviewed_product.image }}" alt="{{ reviewed_product.label }}" class="item-image">
+            </div>
+            <h2 style="text-align: center">{{ reviewed_product.label }}</h2>
+            <p class="text1"><strong>Category: </strong>{{ reviewed_product.category }}</p>
+            <p class="text1"><strong>Brand: </strong>{{ reviewed_product.brand }}</p>
+            <p class="text1"><strong>Quantity: </strong>{{ reviewed_product.quantity }}</p>
+            <p class="text1"><strong>Published: </strong>{{ reviewed_product.published.strftime("%d-%m-%Y") }}</p>
+            {%  if g.user["id"] == reviewed_product["seller_id"] %}
+            <p><a class="action" href="{{ url_for('product.update', id=reviewed_product['id']) }}">Edit</a></p>
+            {% else %}
+            <p class="text1"><strong>Seller: </strong><a href="{{ url_for('profile.profile_page', id=reviewed_product['seller_id']) }}">{{ reviewed_product["seller_username"] }}</a></p>
+            {% endif %}
+            <div style="margin-top:10px">
+                {{ reviewed_product.likes }}
+                <a class="btn" href="{{ url_for('product.react', id=reviewed_product['id'], type=1) }}"><i class="{{ reviewed_product.reaction_settings.like_icon }}" aria-hidden="true" style="color: {{ reviewed_product.reaction_settings.like_color }}"></i></a>
+                {{ reviewed_product.dislikes }}
+                <a class="btn" id="red" href="{{ url_for('product.react', id=reviewed_product['id'], type=-1) }}"><i class="{{ reviewed_product.reaction_settings.dislike_icon}}" aria-hidden="true" style="color: {{ reviewed_product.reaction_settings.dislike_color }}"></i></a>
+            </div>
+            <h3 style="text-align: center; color: #1365ad  ">{{ currency_symbol }} {{ reviewed_product.price }}</h3>
+        </div></a>
+        <div class="review">
+            <p><strong>Rating: {{ reviewed_product.rating }}/5</strong></p>
+            <p>{{ reviewed_product.content }}</p>
+            <div class="reviewer">
+                <hr>
+                {% if g.user["id"] == reviewed_product["user_id"] %}
+                <a href="{{ url_for('product.delete_review', id=reviewed_product.review_id) }}" onclick="return confirm('are you sure!?');">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

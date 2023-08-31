@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}
+    {% if product %}
+        Update Product
+    {% else %}
+        Add Product
+    {% endif %}
+{% endblock title %}
+{% block content %} 
+    <div class="product-container">
+        {% if product %}
+        <h2>Update</h2>
+        <form action="{{ url_for('product.update', id=product['id']) }}" method="post" enctype="multipart/form-data">
+        {% else %}
+        <h2>Create</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% endif %}
+            <hr>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" maxlength="60" required autocomplete="off" value="{{ request.form['name'] or (product['label'] if product else '') }}">
+            <label for="category">Category</label>
+            <input type="text" name="category" id="category" maxlength="60" required autocomplete="off" value="{{ request.form['category'] or (product['category'] if product else '') }}">
+            <label for="brand">Brand</label>
+            <input type="text" name="brand" id="brand" maxlength="60" required autocomplete="off" value="{{ request.form['brand'] or (product['brand'] if product else '') }}">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" autocomplete="off" maxlength="1100">{{ request.form['description'] or (product['description'] if product else '') }}</textarea>
+            <label for="quantity">Quantity</label>
+            <input type="number" name="quantity" id="quantity" min="1" max="100" required autocomplete="off" value="{{ request.form['quantity'] or (product['quantity'] if product else '') }}">
+            <label for="image">Product Image</label>
+            <input type="file" name="image" id="image" accept="image/*">
+            <label for="price">Price €</label>
+            <input type="number" name="price" id="price" min="0" step="0.01" required autocomplete="off" value="{{ request.form['price'] or (product['price'] if product else '') }}">
+            <input type="submit" value="save" onclick="return showConfirmation()">
+        </form>
+        {% if product %}
+        <br>
+        <hr>
+        <form action="{{ url_for('product.delete', id=product['id']) }}" method="post">
+            <input class="danger" type="submit" value="delete" onclick="return confirm('are you sure!?');">
+        </form>
+        {% endif %}
+    </div>
+<script src="{{ url_for('static', filename='custom_functions.js') }}"></script>
+{% endblock %}

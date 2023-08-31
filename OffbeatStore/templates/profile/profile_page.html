@@ -1,0 +1,27 @@
+{%  extends "layout.html" %}
+{% block title %}{{ user.username }} Profile{% endblock title %}
+{% block content %}
+    <div class="profile-item">
+        <div class="grid-item"><strong>Username</strong>: {{ user.username }}</div>
+        <div class="grid-item"><strong>Joined</strong>: {{ user.created.strftime("%d %B %Y") }}</div>
+        <div class="grid-item"><strong>Number of Products</strong>: {{ user.product_count }}</div>
+        <div class="grid-item"><strong>Number of Reviews</strong>: {{ user.review_count }}</div>
+    </div>
+    <hr>
+    <div class="custom-button-container">
+        <a href="{{ url_for('profile.profile_products', id=id, sort="latest") }}" class="custom-button">
+        {% if g.user["id"] == id %}
+        My Catalog
+        {% else %}
+        {{ user.username }} Products
+        {% endif %}
+        </a>
+        <a href="{{ url_for('profile.profile_reviews', id=id) }}" class="custom-button">
+        {% if g.user["id"] == id %}
+        My Reviews
+        {% else %}
+        {{ user.username }} Reviews
+        {% endif %}
+        </a>
+    </div>
+{% endblock %}

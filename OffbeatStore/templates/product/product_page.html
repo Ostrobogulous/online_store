@@ -1,0 +1,78 @@
+{%  extends "layout.html" %}
+{% block title %}{{ product.label }}{% endblock title %}
+{% block content %}
+    <div class="product-view">
+        <div class="product-image-wrapper">
+            <img src={{ product.image }} alt={{ product.label }} class="product-image">
+        </div>
+        <div class="product-details">
+            <h2>{{ product.label }}</h2>
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p><strong>Brand:</strong> {{ product.brand }}</p>
+            <p><strong>Published:</strong> {{ product.published.strftime("%d-%m-%Y") }}</p>
+            <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+            <p class="product-description"><strong>Description:</strong> {{ product.description }}</p>
+            {%  if g.user["id"] == product["seller_id"] %}
+            <p><a class="action" href="{{ url_for('product.update', id=product['id']) }}">Edit</a></p>
+            {% else %}
+            <p class="seller-info"><strong>Seller: </strong><a href="{{ url_for('profile.profile_page', id=product['seller_id']) }}">{{ product.username }}</a></p>
+            {% endif %}
+            <div style="margin-top:10px">
+                {{ product.likes }}
+                <a class="btn" href="{{ url_for('product.react', id=product['id'], type=1) }}"><i class="{{ product.reaction_settings.like_icon }}" aria-hidden="true" style="color: {{ product.reaction_settings.like_color }}"></i></a>
+                {{ product.dislikes }}
+                <a class="btn" id="red" href="{{ url_for('product.react', id=product['id'], type=-1) }}"><i class="{{ product.reaction_settings.dislike_icon}}" aria-hidden="true" style="color: {{ product.reaction_settings.dislike_color }}"></i></a>
+            </div>
+        <br>
+        <button class="open-reviews-button">Reviews</button>
+        {% if g.user and g.user["id"] != product["seller_id"] %}
+        <button class="open-add-review-button">Add Review</button>
+        {% endif %}
+        <div class="price-tag">
+            <span>{{ currency_symbol }} {{ product.price }}</span>
+        </div>
+        </div>
+    </div>
+    <div class="reviews-overlay">
+        <div class="reviews">
+            {% if not reviews %}
+            <p>No reviews at the moment.</p>
+            {% else %}
+            {% for review in reviews %}
+            <div class="review">
+                <p><strong>Rating: {{ review.rating }}/5</strong></p>
+                <p>{{ review.content }}</p>
+                <div class="reviewer">
+                    <hr>
+                    {% if g.user["id"] == review["user_id"] %}
+                    <a href="{{ url_for('product.delete_review', id=review.id) }}" onclick="return confirm('are you sure!?');">Delete</a>
+                    {% else %}
+                    <p>By <a href="{{ url_for('profile.profile_page', id=review.user_id) }}">{{ review.username }}</a></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <button class="close-reviews-button">Close</button>
+        </div>
+    </div>
+    <div class="add-review-overlay">
+        <div class="add-review">
+            <form  method="post" action="{{ url_for('product.add_review', id=product['id']) }}">
+                <label for="rating">Rating</label>
+                <input type="number" name="rating" id="rating" min="1" max="5" required autocomplete="off">
+                <label for="content">Content</label>
+                <textarea name="content" id="content" autocomplete="off" maxlength="1100"></textarea>
+                <br>
+                <input type="submit" value="Save" onclick="return showReviewConfirmation()">
+            </form>
+            <button class="close-add-review-button">Close</button>
+        </div>
+    </div>
+    <script>
+    window.onload = function() {
+    setupReviews();
+    setupAddReview();
+    };
+    </script>
+{% endblock content %}
