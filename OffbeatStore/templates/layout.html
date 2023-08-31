@@ -34,7 +34,7 @@
             {% endif %}
             {% if g.user %}
              <a href="{{ url_for('profile.notification_page') }}">
-            <button>Notifications</button></a>
+            <button>Notifications<span class="notification-count">{{ get_notification_count(g.user['id']) }}</span></button></a>
             <a href="{{ url_for('profile.profile_page', id=g.user['id']) }}">
             <button>Profile</button></a>
             <a href="{{ url_for('authentication.logout') }}">

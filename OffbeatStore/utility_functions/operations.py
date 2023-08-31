@@ -1,7 +1,6 @@
 from OffbeatStore.db import get_db
 from flask import g
 from werkzeug.security import generate_password_hash
-from time import sleep
 
 
 def register_operation(username, password):
@@ -277,3 +276,12 @@ def mark_as_seen_operation(id):
                (True, id)
                )
     db.commit()
+
+
+def count_notifications_operation(id):
+    query = """SELECT COUNT(*) AS notification_count
+               FROM notification
+               WHERE user_id = ? AND seen = ?"""
+    db = get_db()
+    notification_count = db.execute(query, (id, False, )).fetchone()[0]
+    return notification_count
