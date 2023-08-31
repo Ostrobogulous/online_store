@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS reaction;
 DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS notification;
 
 
 CREATE TABLE user(
@@ -47,3 +48,14 @@ CREATE TABLE review(
     updated TIMESTAMP
 );
 
+
+CREATE TABLE notification(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    notifier_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    notification_message TEXT,
+    notification_type TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    seen BOOLEAN NOT NULL DEFAULT FALSE
+)
