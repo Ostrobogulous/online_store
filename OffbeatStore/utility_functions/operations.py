@@ -50,6 +50,9 @@ def delete_product_operation(id):
     query = "DELETE FROM reaction WHERE product_id = ?"
     db.execute(query, (id,))
     db.commit()
+    query = "DELETE FROM notification WHERE product_id = ?"
+    db.execute(query, (id,))
+    db.commit()
 
 
 def search_products_operation(keyword):
@@ -243,4 +246,14 @@ def delete_review_operation(id):
     query = "DELETE FROM review WHERE id = ?"
     db = get_db()
     db.execute(query, (id,))
+    db.commit()
+
+
+def add_notification_operation(user_id, product_id, notification_message, notification_type):
+    query = """INSERT INTO notification(notifier_id, user_id, product_id, notification_message, notification_type)
+                VALUES (?, ?, ?, ?, ?)"""
+    db = get_db()
+    db.execute(query,
+               (g.user["id"], user_id, product_id, notification_message, notification_type)
+               )
     db.commit()

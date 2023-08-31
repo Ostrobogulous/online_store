@@ -10,7 +10,6 @@ class ProfileProducts(View):
 
     def dispatch_request(self, id):
         username = get_username_operation(id)
-        print(username)
 
         if "sort" in request.args:
             sort_option = request.args.get("sort")
