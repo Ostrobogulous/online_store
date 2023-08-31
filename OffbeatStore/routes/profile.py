@@ -1,6 +1,7 @@
 from OffbeatStore.views.profile.profile_page import ProfilePage
 from OffbeatStore.views.profile.profile_products import ProfileProducts
 from OffbeatStore.views.profile.profile_reviews import ProfileReviews
+from OffbeatStore.views.profile.notification_page import NotificationPage
 from OffbeatStore.blueprints import profile_bp as bp
 
 
@@ -12,3 +13,6 @@ bp.add_url_rule("/profile/<int:id>/products",
 
 bp.add_url_rule("/profile/<int:id>/reviews",
                 view_func=ProfileReviews.as_view("profile_reviews"))
+
+bp.add_url_rule("/notifications",
+                view_func=NotificationPage.as_view("notification_page"))

@@ -1,6 +1,7 @@
 from OffbeatStore.db import get_db
 from flask import g
 from werkzeug.security import generate_password_hash
+from time import sleep
 
 
 def register_operation(username, password):
@@ -255,5 +256,24 @@ def add_notification_operation(user_id, product_id, notification_message, notifi
     db = get_db()
     db.execute(query,
                (g.user["id"], user_id, product_id, notification_message, notification_type)
+               )
+    db.commit()
+
+
+def get_notifications_operation():
+    query = """SELECT n.id, product_id, notification_message, notifier_id, n.created, username, label, seen
+               FROM notification n JOIN user u ON n.notifier_id = u.id JOIN product p ON n.product_id = p.id
+               WHERE user_id = ?"""
+    db = get_db()
+    notifications = db.execute(query, (g.user["id"],)).fetchall()
+    return notifications
+
+
+def mark_as_seen_operation(id):
+    query = """UPDATE notification SET seen = ?
+            WHERE id = ?"""
+    db = get_db()
+    db.execute(query,
+               (True, id)
                )
     db.commit()

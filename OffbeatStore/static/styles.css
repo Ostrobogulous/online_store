@@ -437,7 +437,7 @@ input:focus,textarea:focus{
 .reviewer hr{
     border-color: #1365ad;
 }
-.reviewer a{
+.reviewer a, .notifications a{
     text-decoration: none;
     color: #1365ad;
 }
@@ -460,4 +460,20 @@ input:focus,textarea:focus{
     border: 1px solid #1365ad;
     width: 65vw;
     margin: 10px auto 20px;
+}
+
+.notifications{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.notification-box{
+    padding: 5px;
+    width: 25vw;
+    font-size: 18px;
+    background-color: #e1f0ff;
+    margin: 15px;
+    border-radius: 3px;
 }
