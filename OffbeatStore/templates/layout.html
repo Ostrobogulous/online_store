@@ -33,8 +33,13 @@
             {% set currency_symbol = '£' %}
             {% endif %}
             {% if g.user %}
-             <a href="{{ url_for('profile.notification_page') }}">
-            <button>Notifications<span class="notification-count">{{ get_notification_count(g.user['id']) }}</span></button></a>
+            <a href="{{ url_for('profile.notification_page') }}">
+            {% set notification_count = get_notification_count(g.user['id']) %}
+            <button>Notifications
+                {% if notification_count > 0 %}
+                <span class="notification-count">{{ notification_count }}</span>
+                {% endif %}
+            </button></a>
             <a href="{{ url_for('profile.profile_page', id=g.user['id']) }}">
             <button>Profile</button></a>
             <a href="{{ url_for('authentication.logout') }}">

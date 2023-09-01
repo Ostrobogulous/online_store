@@ -54,7 +54,6 @@ CREATE TABLE notification(
     notifier_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
-    notification_message TEXT,
     notification_type TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     seen BOOLEAN NOT NULL DEFAULT FALSE

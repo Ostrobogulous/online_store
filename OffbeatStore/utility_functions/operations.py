@@ -249,18 +249,21 @@ def delete_review_operation(id):
     db.commit()
 
 
-def add_notification_operation(user_id, product_id, notification_message, notification_type):
-    query = """INSERT INTO notification(notifier_id, user_id, product_id, notification_message, notification_type)
-                VALUES (?, ?, ?, ?, ?)"""
+def add_notification_operation(user_id, product_id, notification_type):
+    query = """INSERT INTO notification(notifier_id, user_id, product_id, notification_type)
+                VALUES (?, ?, ?, ?)"""
     db = get_db()
-    db.execute(query,
-               (g.user["id"], user_id, product_id, notification_message, notification_type)
-               )
-    db.commit()
+    try:
+        db.execute(query,
+                   (g.user["id"], user_id, product_id, notification_type)
+                   )
+        db.commit()
+    except:
+        pass
 
 
 def get_notifications_operation():
-    query = """SELECT n.id, product_id, notification_message, notifier_id, n.created, username, label, seen
+    query = """SELECT n.id, product_id, notifier_id, notification_type, n.created, username, label, seen
                FROM notification n JOIN user u ON n.notifier_id = u.id JOIN product p ON n.product_id = p.id
                WHERE user_id = ?"""
     db = get_db()
@@ -268,13 +271,11 @@ def get_notifications_operation():
     return notifications
 
 
-def mark_as_seen_operation(id):
+def mark_as_seen_operation(id_list):
     query = """UPDATE notification SET seen = ?
-            WHERE id = ?"""
+               WHERE id IN ({})""".format(', '.join(['?'] * len(id_list)))
     db = get_db()
-    db.execute(query,
-               (True, id)
-               )
+    db.execute(query, ([True] + id_list))
     db.commit()
 
 

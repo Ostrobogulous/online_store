@@ -3,7 +3,7 @@ from flask.views import View
 from OffbeatStore.utility_functions.utils import reacted, get_product
 from OffbeatStore.utility_functions.decorators import login_required
 from OffbeatStore.utility_functions.operations import react_operation
-from OffbeatStore.utility_functions.notification import add_notification
+from OffbeatStore.utility_functions.notification import add_notification, Notification
 
 
 class ReactProduct(View):
@@ -21,9 +21,9 @@ class ReactProduct(View):
         react_operation(id, reaction_type, check, reaction_id)
 
         if check != reaction_type:
-            notification_type = "dislike"
+            notification_type = Notification.DISLIKE.value["label"]
             if reaction_type == 1:
-                notification_type = "like"
+                notification_type = Notification.LIKE.value["label"]
 
             add_notification(product["seller_id"], id, notification_type)
 
