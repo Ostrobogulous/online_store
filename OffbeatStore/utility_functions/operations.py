@@ -1,6 +1,7 @@
 from OffbeatStore.db import get_db
 from flask import g
 from werkzeug.security import generate_password_hash
+import logging
 
 
 def register_operation(username, password):
@@ -48,6 +49,9 @@ def delete_product_operation(id):
     db.execute(query, (id,))
     db.commit()
     query = "DELETE FROM reaction WHERE product_id = ?"
+    db.execute(query, (id,))
+    db.commit()
+    query = "DELETE FROM notification WHERE product_id = ?"
     db.execute(query, (id,))
     db.commit()
 
@@ -244,3 +248,42 @@ def delete_review_operation(id):
     db = get_db()
     db.execute(query, (id,))
     db.commit()
+
+
+def add_notification_operation(user_id, product_id, notification_type):
+    query = """INSERT INTO notification(notifier_id, user_id, product_id, notification_type)
+                VALUES (?, ?, ?, ?)"""
+    db = get_db()
+    try:
+        db.execute(query,
+                   (g.user["id"], user_id, product_id, notification_type)
+                   )
+        db.commit()
+    except Exception as e:
+        logging.error(f"An error occurred during insertion of notification in the database: {e}")
+
+
+def get_notifications_operation():
+    query = """SELECT n.id, product_id, notifier_id, notification_type, n.created, username, label, seen
+               FROM notification n JOIN user u ON n.notifier_id = u.id JOIN product p ON n.product_id = p.id
+               WHERE user_id = ?"""
+    db = get_db()
+    notifications = db.execute(query, (g.user["id"],)).fetchall()
+    return notifications
+
+
+def mark_as_seen_operation(id_list):
+    query = """UPDATE notification SET seen = ?
+               WHERE id IN ({})""".format(', '.join(['?'] * len(id_list)))
+    db = get_db()
+    db.execute(query, ([True] + id_list))
+    db.commit()
+
+
+def count_notifications_operation(id):
+    query = """SELECT COUNT(*) AS notification_count
+               FROM notification
+               WHERE user_id = ? AND seen = ?"""
+    db = get_db()
+    notification_count = db.execute(query, (id, False, )).fetchone()[0]
+    return notification_count

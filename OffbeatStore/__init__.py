@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask_caching import Cache
+from OffbeatStore.utility_functions.operations import count_notifications_operation
+
 
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
 
@@ -28,6 +30,10 @@ def create_app(test_config=None):
     @app.route("/Hello")
     def forward():
         return "This Website Exists!"
+
+    @app.context_processor
+    def inject_notification_count():
+        return dict(get_notification_count=count_notifications_operation)
 
     app.debug = True
 
