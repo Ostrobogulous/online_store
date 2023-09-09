@@ -25,6 +25,6 @@ class ReactProduct(View):
             if reaction_type == 1:
                 notification_type = Notification.LIKE.value["label"]
 
-            add_notification(product["seller_id"], id, notification_type)
+            add_notification(product["seller_id"], g.user["id"], id, notification_type)
 
         return redirect(request.referrer or '/')

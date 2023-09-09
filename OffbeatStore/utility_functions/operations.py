@@ -1,6 +1,7 @@
 from OffbeatStore.db import get_db
 from flask import g
 from werkzeug.security import generate_password_hash
+import logging
 
 
 def register_operation(username, password):
@@ -258,8 +259,8 @@ def add_notification_operation(user_id, product_id, notification_type):
                    (g.user["id"], user_id, product_id, notification_type)
                    )
         db.commit()
-    except:
-        pass
+    except Exception as e:
+        logging.error(f"An error occurred during insertion of notification in the database: {e}")
 
 
 def get_notifications_operation():

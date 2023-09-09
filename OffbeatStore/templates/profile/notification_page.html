@@ -5,8 +5,8 @@
         <h2>New notifications:</h2>
         {% for notification in notifications %}
         {% if not notification.seen %}
-        <div class="notification-box">
-            <p><a href="{{ url_for('profile.profile_page', id=notification.notifier_id) }}">{{ notification.username }}</a> {{ notification.notification_message }} <a href="{{ url_for('product.product_page', id=notification.product_id) }}"><strong>{{ notification.label }}</strong></a>
+        <div class="notification-box" onclick="location.href='{{ url_for('product.product_page', id=notification.product_id) }}';" style="cursor: pointer;">
+            <p><a href="{{ url_for('profile.profile_page', id=notification.notifier_id) }}">{{ notification.username }}</a> {{ notification.notification_message }}<strong style="color: #1365ad;"> {{ notification.label }}</strong></p>
             <p style="font-size: 14px; text-align: right">{{ notification.created }}</p>
         </div>
         {% endif %}

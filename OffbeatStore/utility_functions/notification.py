@@ -1,10 +1,9 @@
-from flask import g
 from OffbeatStore.utility_functions.operations import add_notification_operation
 from enum import Enum
 
 
-def add_notification(user_id, product_id, notification_type):
-    if g.user["id"] != user_id:
+def add_notification(user_id, logged_in_user_id, product_id, notification_type):
+    if logged_in_user_id != user_id:
 
         add_notification_operation(user_id, product_id, notification_type)
 

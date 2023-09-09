@@ -35,5 +35,5 @@ class AddReview(View):
         else:
             rating = int(rating)
             create_review_operation(id, rating, content)
-            add_notification(product["seller_id"], id, Notification.REVIEW.value["label"])
+            add_notification(product["seller_id"], g.user["id"], id, Notification.REVIEW.value["label"])
             return redirect(url_for("product.product_page", id=id))

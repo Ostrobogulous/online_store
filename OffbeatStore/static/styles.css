@@ -477,6 +477,9 @@ input:focus,textarea:focus{
     margin: 15px;
     border-radius: 3px;
 }
+.notification-box:hover{
+    background-color: #d0e5fa;
+}
 .notification-count {
     background-color: red;
     color: white;
