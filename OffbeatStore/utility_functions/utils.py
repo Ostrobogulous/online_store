@@ -4,6 +4,7 @@ from datetime import datetime
 from OffbeatStore.utility_functions.operations import get_product_operation, get_username_operation, get_user_operation, get_reaction_operation, \
     count_reaction_operation, user_reaction_operation
 from OffbeatStore.services.currency_converter import ExchangeRateClient
+from os import environ
 
 
 def remove_extra_spaces(string):
@@ -118,7 +119,8 @@ def adjust_product(product_row):
 
 def adjust_currency(price, currency):
     if currency != "EUR":
-        exchange_client = ExchangeRateClient()
+        currency_converter_api_key = environ["CURRENCY_CONVERTER_API_KEY"]
+        exchange_client = ExchangeRateClient(currency_converter_api_key)
         price = float(format(exchange_client.convert_price(price, currency), ".2f"))
 
     return price

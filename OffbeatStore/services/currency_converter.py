@@ -3,10 +3,15 @@ from OffbeatStore import cache
 
 
 class ExchangeRateClient:
-    URL = "https://api.exchangerate.host/latest"
+    BASE_URL = "http://api.exchangerate.host"
+    LATEST_ENDPOINT = "/latest"
+
+    def __init__(self, api_key):
+        self.api_key = api_key
 
     def __request_data(self):
-        response = requests.get(self.URL)
+        url = f"{self.BASE_URL}{self.LATEST_ENDPOINT}?access_key={self.api_key}"
+        response = requests.get(url)
         data = response.json()
         return data["rates"]
 
