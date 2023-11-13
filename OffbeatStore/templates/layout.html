@@ -33,7 +33,7 @@
             {% set currency_symbol = '£' %}
             {% endif %}
             {% if g.user %}
-            <a href="{{ url_for('profile.notification_page') }}">
+            <a href="{{ url_for('profile.notification_page', page_number=1) }}">
             {% set notification_count = get_notification_count(g.user['id']) %}
             <button>Notifications
                 {% if notification_count > 0 %}
