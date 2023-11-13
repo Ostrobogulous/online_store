@@ -263,12 +263,15 @@ def add_notification_operation(user_id, product_id, notification_type):
         logging.error(f"An error occurred during insertion of notification in the database: {e}")
 
 
-def get_notifications_operation():
+def get_notifications_operation(page_number, page_size):
+    skip = (page_number - 1) * page_size
     query = """SELECT n.id, product_id, notifier_id, notification_type, n.created, username, label, seen
                FROM notification n JOIN user u ON n.notifier_id = u.id JOIN product p ON n.product_id = p.id
-               WHERE user_id = ?"""
+               WHERE user_id = ?
+               ORDER BY n.created DESC 
+               LIMIT ? OFFSET ?"""
     db = get_db()
-    notifications = db.execute(query, (g.user["id"],)).fetchall()
+    notifications = db.execute(query, (g.user["id"], page_size, skip,)).fetchall()
     return notifications
 
 
