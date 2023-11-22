@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from flask.views import View
 from OffbeatStore.utility_functions.decorators import login_required
 from OffbeatStore.utility_functions.operations import get_notifications_operation, mark_as_seen_operation
@@ -10,6 +10,8 @@ class NotificationPage(View):
     decorators = [login_required]
 
     methods = ["GET"]
+
+    PAGE_SIZE = 5
 
     @staticmethod
     def format_notification_date(created):
@@ -23,7 +25,8 @@ class NotificationPage(View):
             return created.strftime('%d-%m-%Y | %H:%M')
 
     def dispatch_request(self):
-        notifications_rows = get_notifications_operation()
+        page_number = int(request.args.get('page_number', 1))
+        notifications_rows = get_notifications_operation(page_number, self.PAGE_SIZE)
 
         notifications = []
         mark_as_seen_notifications = []
@@ -37,6 +40,4 @@ class NotificationPage(View):
 
         mark_as_seen_operation(mark_as_seen_notifications)
 
-        notifications.reverse()
-
-        return render_template("profile/notification_page.html", notifications=notifications)
+        return render_template("profile/notification_page.html", notifications=notifications, page_size=self.PAGE_SIZE, page_number=page_number)

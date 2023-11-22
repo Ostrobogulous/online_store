@@ -437,7 +437,7 @@ input:focus,textarea:focus{
 .reviewer hr{
     border-color: #1365ad;
 }
-.reviewer a, .notifications a{
+.reviewer a, .notifications a, .pagination a{
     text-decoration: none;
     color: #1365ad;
 }
@@ -487,4 +487,12 @@ input:focus,textarea:focus{
     padding: 2px 6px;
     font-size: 12px;
     margin-left: 4px;
+}
+
+.pagination{
+    text-align: center;
+}
+
+.pagination a{
+    margin: 15px;
 }
