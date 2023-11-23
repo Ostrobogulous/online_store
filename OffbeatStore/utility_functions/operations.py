@@ -48,12 +48,6 @@ def delete_product_operation(id):
     query = "DELETE FROM product WHERE id = ?"
     db.execute(query, (id,))
     db.commit()
-    query = "DELETE FROM reaction WHERE product_id = ?"
-    db.execute(query, (id,))
-    db.commit()
-    query = "DELETE FROM notification WHERE product_id = ?"
-    db.execute(query, (id,))
-    db.commit()
 
 
 def search_products_operation(keyword):
