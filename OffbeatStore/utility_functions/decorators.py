@@ -6,7 +6,7 @@ def logged_in(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is not None:
-            return redirect(url_for("data.index"))
+            return redirect(url_for("main.index"))
         return view(**kwargs)
 
     return wrapped_view

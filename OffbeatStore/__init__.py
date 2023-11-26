@@ -38,7 +38,7 @@ def create_app(test_config=None):
     app.debug = True
 
     from . import db
-    db.init_app(app)  # flask --app OffbeatStore init-db
+    db.init_app(app)
 
     from OffbeatStore.routes import authentication, main, profile, product
 
